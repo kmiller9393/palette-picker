@@ -9,10 +9,8 @@ app.locals.mockPalettes = [
   { id: 3, color: '#008080' }
 ];
 
-app.get('/', (request, response) => {
-  response.send('Express Connected!');
-});
-
 app.listen(app.get('port'), () => {
   console.log(`App is running on ${app.get('port')}`);
 });
+
+app.use(express.static('public'));
