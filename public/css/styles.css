@@ -11,8 +11,17 @@ h1 {
   text-align: center;
 }
 
+h3 {
+  padding-left: 1rem;
+}
+
 form {
   margin-top: 1.7rem;
+}
+
+input {
+  border-radius: 5px;
+  height: 18px;
 }
 
 .palette-container {
@@ -140,4 +149,14 @@ form {
   transform: translate(0px, -1px);
   backface-visibility: hidden;
   color: #7a8393;
+}
+
+.project-container {
+  align-items: center;
+  background-color: rgb(210, 208, 208);
+  border-radius: 15px;
+  display: flex;
+  height: 140px;
+  margin-top: 0.9rem;
+  opacity: 0.7;
 }
