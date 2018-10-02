@@ -1,18 +1,13 @@
-@import url(
-  https://fonts.googleapis.com/css?family=Open+Sans:400,
-  600,
-  700,
-  800,
-  900
-);
-
 body {
   background-color: #f4f4f4;
   font-family: 'Open Sans', sans-serif;
 }
 
 h1 {
-  color: #6c7686;
+  color: #303030;
+  font-family: 'Poiret One';
+  font-size: 2.5rem;
+  margin: 0.5rem 0 0.5rem 0;
   text-align: center;
 }
 
@@ -45,7 +40,7 @@ form {
 }
 
 .palette-2 {
-  background-color: blue;
+  background-color: lightskyblue;
 }
 
 .palette-3 {
@@ -74,9 +69,12 @@ form {
   margin-left: 79px;
 }
 
-.create-palette {
-  text-decoration: none;
-  font-size: 12px;
+::placeholder {
+  color: #6c7686;
+}
+
+.radomize-palette {
+  font-size: 12.5px;
   color: #6c7686;
   text-shadow: 0 1px 0 rgba(255, 255, 255, 0.29);
   letter-spacing: 2px;
@@ -87,8 +85,8 @@ form {
   margin-top: 1.2rem;
   cursor: pointer;
   transition: all ease-in-out 100ms;
-  width: 200px;
-  height: 60px;
+  width: 190px;
+  height: 50px;
   -webkit-font-smoothing: antialiased;
   background: linear-gradient(-179deg, #f4f4f4 0%, #c0c0c0 100%);
   box-shadow: 0 5px 6px -4px rgba(0, 0, 0, 0.22),
@@ -98,7 +96,7 @@ form {
   border-radius: 140px;
 }
 
-.create-palette:hover {
+.radomize-palette:hover {
   box-shadow: 0 5px 10px 0px rgba(0, 0, 0, 0.22),
     0 10px 13px 0px rgba(0, 0, 0, 0.34),
     inset 0 18px 18px 0 rgba(255, 255, 255, 0.35),
@@ -108,10 +106,38 @@ form {
   color: #7a8393;
 }
 
-.create-palette:active {
+.radomize-palette:active {
   box-shadow: 0 5px 10px 0px rgba(0, 0, 0, 0.22),
     0 10px 13px 0px rgba(0, 0, 0, 0.34),
     inset 0 3px 3px 0 rgba(255, 255, 255, 0.35),
     inset 0 -3px 3px 0 rgba(0, 0, 0, 0.1);
   backface-visibility: hidden;
+}
+
+.add-palette,
+.add-project {
+  background: linear-gradient(-179deg, #f4f4f4 0%, #c0c0c0 100%);
+  box-shadow: 0 5px 6px -4px rgba(0, 0, 0, 0.22),
+    0 10px 13px -4px rgba(0, 0, 0, 0.34),
+    inset 0 30px 30px 0 rgba(255, 255, 255, 0.35),
+    inset 0 -30px 30px 0 rgba(0, 0, 0, 0.1);
+  border-radius: 140px;
+  background: #f7f7f7;
+  color: #6c7686;
+  cursor: pointer;
+  font-weight: 600;
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.29);
+  transition: all ease-in-out 100ms;
+  -webkit-font-smoothing: antialiased;
+}
+
+.add-palette:hover,
+.add-project:hover {
+  box-shadow: 0 5px 10px 0px rgba(0, 0, 0, 0.22),
+    0 10px 13px 0px rgba(0, 0, 0, 0.34),
+    inset 0 18px 18px 0 rgba(255, 255, 255, 0.35),
+    inset 0 -18px 18px 0 rgba(0, 0, 0, 0.1);
+  transform: translate(0px, -1px);
+  backface-visibility: hidden;
+  color: #7a8393;
 }
