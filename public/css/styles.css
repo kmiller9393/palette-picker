@@ -1,3 +1,61 @@
-body {
+h1 {
+  text-align: center;
+}
+
+form {
+  margin-top: 1.7rem;
+}
+
+.palette-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  height: 60vh;
+  width: 100%;
+}
+
+.palette-1,
+.palette-2,
+.palette-3,
+.palette-4,
+.palette-5 {
+  align-items: center;
+  display: flex;
+  justify-content: center;
+  min-width: 284.8px;
+  min-height: 100%;
+}
+
+.palette-1 {
   background-color: red;
+}
+
+.palette-2 {
+  background-color: blue;
+}
+
+.palette-3 {
+  background-color: violet;
+}
+
+.palette-4 {
+  background-color: green;
+}
+
+.palette-5 {
+  background-color: burlywood;
+}
+
+.padlock-image-1:hover,
+.padlock-image-2:hover,
+.padlock-image-3:hover,
+.padlock-image-4:hover,
+.padlock-image-5:hover {
+  cursor: pointer;
+}
+
+.form-container {
+  display: flex;
+  justify-content: space-around;
+  margin-left: 79px;
 }
