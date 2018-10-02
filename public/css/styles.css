@@ -64,11 +64,7 @@ input {
   background-color: burlywood;
 }
 
-.padlock-image-1:hover,
-.padlock-image-2:hover,
-.padlock-image-3:hover,
-.padlock-image-4:hover,
-.padlock-image-5:hover {
+.padlock-image:hover {
   cursor: pointer;
 }
 
