@@ -3,18 +3,18 @@ const lockButton = $('.padlock-image');
 
 const generateNewColor = () => {
   let hex = '#';
-  let possibleChars = '01234567890ABCDEF'.split('');
+  let possibleChars = '0123456789ABCDEF'.split('');
 
   for (let i = 0; i < 6; i++) {
     hex += possibleChars[Math.floor(Math.random() * 16)];
   }
-  console.log(hex);
   return hex;
 };
 
 const lockColor = e => {
-  lockButton.toggleClass('locked-color');
-  console.log(this);
+  $(e.target)
+    .parent('div')
+    .toggleClass('locked-color');
 };
 
 const setNewColor = () => {
@@ -27,14 +27,12 @@ const setNewColor = () => {
   ];
 
   palettes.forEach(palette => {
-    console.log(palette);
-    if ($(`${palette}`).hasClass('locked-color')) {
-      return;
+    if (!$(`${palette}`).hasClass('locked-color')) {
+      $(`${palette}`).css('background-color', generateNewColor());
     }
-    $(`${palette}`).css('background-color', generateNewColor());
   });
 };
 
-randomizeButton.on('click', generateNewColor, setNewColor);
+randomizeButton.on('click', setNewColor);
 
 lockButton.on('click', lockColor);
