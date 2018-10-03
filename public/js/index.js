@@ -12,6 +12,23 @@ const generateNewColor = () => {
 };
 
 const lockColor = e => {
+  if (
+    $(e.target)
+      .attr('src')
+      .toString()
+      .indexOf('/images/padlock-unlock.svg') != -1
+  ) {
+    e.target.src = e.target.src.replace(
+      '/images/padlock-unlock.svg',
+      '/images/padlock.svg'
+    );
+  } else {
+    e.target.src = e.target.src.replace(
+      '/images/padlock.svg',
+      '/images/padlock-unlock.svg'
+    );
+  }
+
   $(e.target)
     .parent('div')
     .toggleClass('locked-color');
