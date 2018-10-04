@@ -1,20 +1,14 @@
 const express = require('express');
+const environment = process.env.NODE_ENV || 'development';
+const configuration = require('./knexfile')[environment];
+const database = require('knex')(configuration);
 const app = express();
 const bodyParser = require('body-parser');
-const environment = process.env.NODE_ENV || 'development';
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 app.set('port', process.env.PORT || 3000);
-
-app.locals.colors = [
-  { id: 1, color: '#f44253' },
-  { id: 2, color: '#011c4f' },
-  { id: 3, color: '#fff58c' },
-  { id: 4, color: '#007c02' },
-  { id: 5, color: '#ffa163' }
-];
 
 app.listen(app.get('port'), () => {
   console.log(`App is running on ${app.get('port')}`);
@@ -54,23 +48,43 @@ app.post('/api/v1/palettes', (request, response) => {
     'color_5'
   ]) {
     if (!palette[requiredParameter]) {
-      return response.status(422);
+      return response.status(422).send({
+        error: `Expected format: { palette_name: <String>, color_1: <String>, color_2: <String>, color_3: <String>, color_4: <String>, color_5: <String> }. You're missing a "${requiredParameter}" property.`
+      });
     }
   }
 
-  const id = app.locals.colors.length + 1;
-
-  const color = '#f7f7f7';
-
-  const selection = { id, color };
-
-  app.locals.colors.push(selection);
-
-  response.status(201).json({ id, color });
+  database('palettes')
+    .insert(palette, 'id')
+    .then(palette => {
+      response.status(201).json({ id: palette[0] });
+    })
+    .catch(error => {
+      response.status(500).json({ error });
+    });
 });
 
-app.post('api/v1/projects', (request, response) => {});
+app.post('api/v1/projects', (request, response) => {
+  const project = request.body;
 
-app.delete('/api/v1/projects/:id', (request, response) => {});
+  for (let requiredParameter of ['project_name']) {
+    if (!project[requiredParameter]) {
+      return response.status(422).send({
+        error: `Expected format: { project_name: <String> }. You're missing a "${requiredParameter}" property.`
+      });
+    }
+  }
+
+  database('projects')
+    .insert(project, 'id')
+    .then(project => {
+      response.status(201).json({ id: project[0] });
+    })
+    .catch(error => {
+      response.status(500).json({ error });
+    });
+});
+
+app.delete('/api/v1/:id/palettes/', (request, response) => {});
 
 app.use(express.static('public'));
