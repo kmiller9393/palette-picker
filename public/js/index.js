@@ -3,7 +3,7 @@ const lockButton = $('.padlock-image');
 
 const generateNewColor = () => {
   let hex = '#';
-  let possibleChars = '0123456789ABCDEF'.split('');
+  let possibleChars = '0123456789ABCDEF';
 
   for (let i = 0; i < 6; i++) {
     hex += possibleChars[Math.floor(Math.random() * 16)];
@@ -11,11 +11,12 @@ const generateNewColor = () => {
   return hex;
 };
 
+$(document).ready(() => setNewColor());
+
 const lockColor = e => {
   if (
     $(e.target)
       .attr('src')
-      .toString()
       .indexOf('/images/padlock-unlock.svg') != -1
   ) {
     e.target.src = e.target.src.replace(
@@ -45,7 +46,11 @@ const setNewColor = () => {
 
   palettes.forEach(palette => {
     if (!$(`${palette}`).hasClass('locked-color')) {
-      $(`${palette}`).css('background-color', generateNewColor());
+      const newColor = generateNewColor();
+      $(`${palette}`).css('background-color', newColor);
+      $(`${palette}`)
+        .children('p')
+        .text(newColor);
     }
   });
 };

@@ -44,33 +44,24 @@ input {
 .palette-5 {
   align-items: center;
   display: flex;
-  justify-content: center;
+  flex-direction: column;
+  justify-content: flex-end;
   min-width: 284.8px;
   min-height: 100%;
 }
 
-.palette-1 {
-  background-color: red;
-}
-
-.palette-2 {
-  background-color: lightskyblue;
-}
-
-.palette-3 {
-  background-color: violet;
-}
-
-.palette-4 {
-  background-color: green;
-}
-
-.palette-5 {
-  background-color: burlywood;
-}
-
 .padlock-image:hover {
   cursor: pointer;
+}
+
+.palette-label-1,
+.palette-label-2,
+.palette-label-3,
+.palette-label-4,
+.palette-label-5 {
+  color: #303030;
+  font-size: 1.5rem;
+  margin: 4rem 0 2rem 0;
 }
 
 .form-container {
