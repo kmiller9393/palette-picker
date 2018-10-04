@@ -40,9 +40,10 @@ app.get('/api/v1/palette-colors/:id', (request, response) => {
 
 app.post('/api/v1/palette-colors', (request, response) => {
   const id = app.locals.colors.length + 1;
-  console.log(request);
+
   const color = '#f7f7f7';
-  // const selection = { id, color };
+
+  const selection = { id, color };
 
   app.locals.colors.push(selection);
 
