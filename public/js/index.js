@@ -1,6 +1,12 @@
 const randomizeButton = $('.radomize-palette');
 const lockButton = $('.padlock-image');
 
+$(document).ready(() => setNewColor());
+
+window.onkeydown = e => {
+  if (e.keyCode === 32) setNewColor();
+};
+
 const generateNewColor = () => {
   let hex = '#';
   let possibleChars = '0123456789ABCDEF';
@@ -10,8 +16,6 @@ const generateNewColor = () => {
   }
   return hex;
 };
-
-$(document).ready(() => setNewColor());
 
 const lockColor = e => {
   if (
