@@ -1,6 +1,7 @@
 const express = require('express');
 const app = express();
 const bodyParser = require('body-parser');
+const environment = process.env.NODE_ENV || 'development';
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -19,26 +20,44 @@ app.listen(app.get('port'), () => {
   console.log(`App is running on ${app.get('port')}`);
 });
 
-app.get('/api/v1/palette-colors', (request, response) => {
-  const colors = app.locals.colors;
-
-  response.status(200).json({ colors });
+app.get('/api/v1/palettes', (request, response) => {
+  database('palettes')
+    .select()
+    .then(palettes => {
+      response.status(200).json(palettes);
+    })
+    .catch(error => {
+      response.status(500).json({ error });
+    });
 });
 
-app.get('/api/v1/palette-colors/:id', (request, response) => {
-  const { id } = request.params;
-  const color = app.locals.colors.find(color => color.id == id);
+app.get('/api/v1/projects', (request, response) => {
+  database('projects')
+    .select()
+    .then(projects => {
+      response.status(200).json(projects);
+    })
+    .catch(error => {
+      response.status(500).json({ error });
+    });
+});
 
-  if (color) {
-    return response.status(200).json(color);
-  } else {
-    return response
-      .status(404)
-      .send({ error: `No palette found with an id of ${id}.` });
+app.post('/api/v1/palettes', (request, response) => {
+  const palette = request.body;
+
+  for (let requiredParameter of [
+    'palette_name',
+    'color_1',
+    'color_2',
+    'color_3',
+    'color_4',
+    'color_5'
+  ]) {
+    if (!palette[requiredParameter]) {
+      return response.status(422);
+    }
   }
-});
 
-app.post('/api/v1/palette-colors', (request, response) => {
   const id = app.locals.colors.length + 1;
 
   const color = '#f7f7f7';
@@ -49,5 +68,9 @@ app.post('/api/v1/palette-colors', (request, response) => {
 
   response.status(201).json({ id, color });
 });
+
+app.post('api/v1/projects', (request, response) => {});
+
+app.delete('/api/v1/projects/:id', (request, response) => {});
 
 app.use(express.static('public'));
