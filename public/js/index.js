@@ -8,12 +8,6 @@ const getProjects = async () => {
   const response = await fetch(url);
   const projects = await response.json();
   const palettes = await getPalettes();
-  console.log(projects);
-  console.log(palettes);
-
-  const colors = {
-    colors: []
-  };
 
   const allColors = palettes.map(palette => {
     return [
@@ -25,13 +19,11 @@ const getProjects = async () => {
     ];
   });
 
-  const allProjects = projects.map(
-    project =>
-      console.log(project) ||
-      projectContainer.append(
-        `<section class="saved-palette-container">${project.project_name
-          .charAt(0)
-          .toUpperCase() + project.project_name.slice(1)}: 
+  const allProjects = projects.map(project =>
+    projectContainer.append(
+      `<section class="saved-palette-container">${project.project_name
+        .charAt(0)
+        .toUpperCase() + project.project_name.slice(1)}: 
         <div class="single-palette" style="background-color:${
           allColors[0][0]
         }"></div>
@@ -48,7 +40,7 @@ const getProjects = async () => {
             allColors[0][4]
           }"></div>
       </section>`
-      )
+    )
   );
 };
 
