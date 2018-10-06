@@ -2,44 +2,41 @@ const randomizeButton = $('.radomize-palette');
 const lockButton = $('.padlock-image');
 const projectContainer = $('.project-container');
 
-const getProjects = async () => {
+let colors = [];
+
+const displayProjects = async () => {
   const url = '/api/v1/projects';
 
   const response = await fetch(url);
   const projects = await response.json();
   const palettes = await getPalettes();
 
-  const allColors = palettes.map(palette => {
-    return [
-      palette.color_1,
-      palette.color_2,
-      palette.color_3,
-      palette.color_4,
-      palette.color_5
-    ];
-  });
-
-  const allProjects = projects.map(project =>
-    projectContainer.append(
-      `<section class="saved-palette-container">${project.project_name
-        .charAt(0)
-        .toUpperCase() + project.project_name.slice(1)}: 
+  projects.map(project =>
+    palettes.forEach(
+      palette =>
+        palette.project_id === project.id
+          ? projectContainer.append(
+              `<section class="saved-palette-container">${project.project_name
+                .charAt(0)
+                .toUpperCase() + project.project_name.slice(1)} 
         <div class="single-palette" style="background-color:${
-          allColors[0][0]
+          palette.project_id === project.id ? palette.color_1 : ''
         }"></div>
         <div class="single-palette" style="background-color:${
-          allColors[0][1]
+          palette.project_id === project.id ? palette.color_2 : ''
         }"></div>
         <div class="single-palette" style="background-color:${
-          allColors[0][2]
+          palette.project_id === project.id ? palette.color_3 : ''
         }"></div>
           <div class="single-palette" style="background-color:${
-            allColors[0][3]
+            palette.project_id === project.id ? palette.color_4 : ''
           }"></div>
           <div class="single-palette" style="background-color:${
-            allColors[0][4]
+            palette.project_id === project.id ? palette.color_5 : ''
           }"></div>
       </section>`
+            )
+          : ''
     )
   );
 };
@@ -52,7 +49,7 @@ const getPalettes = async () => {
   return palettes;
 };
 
-$(document).ready(() => setNewColor(), getProjects());
+$(document).ready(() => setNewColor(), displayProjects());
 
 window.onkeydown = e => {
   if (e.keyCode === 32) setNewColor();
