@@ -1,47 +1,57 @@
 const randomizeButton = $('.radomize-palette');
 const lockButton = $('.padlock-image');
-const projectContainer = $('.project-container');
 
 let colors = [];
 
-const displayProjects = async () => {
-  const url = '/api/v1/projects';
+const displayPalettes = async id => {
+  const palettes = await fetchPalettes();
 
-  const response = await fetch(url);
-  const projects = await response.json();
-  const palettes = await getPalettes();
-
-  projects.map(project =>
-    palettes.forEach(
-      palette =>
-        palette.project_id === project.id
-          ? projectContainer.append(
-              `<section class="saved-palette-container">${project.project_name
-                .charAt(0)
-                .toUpperCase() + project.project_name.slice(1)} 
-        <div class="single-palette" style="background-color:${
-          palette.project_id === project.id ? palette.color_1 : ''
-        }"></div>
-        <div class="single-palette" style="background-color:${
-          palette.project_id === project.id ? palette.color_2 : ''
-        }"></div>
-        <div class="single-palette" style="background-color:${
-          palette.project_id === project.id ? palette.color_3 : ''
-        }"></div>
-          <div class="single-palette" style="background-color:${
-            palette.project_id === project.id ? palette.color_4 : ''
-          }"></div>
-          <div class="single-palette" style="background-color:${
-            palette.project_id === project.id ? palette.color_5 : ''
-          }"></div>
-      </section>`
-            )
-          : ''
-    )
+  palettes.forEach(
+    palette =>
+      palette.project_id === id
+        ? $(`#${id}`).append(
+            `<section class="palettes">
+              <div class="single-palette" style="background-color:${
+                palette.project_id === id ? palette.color_1 : ''
+              }"></div>
+              <div class="single-palette" style="background-color:${
+                palette.project_id === id ? palette.color_2 : ''
+              }"></div>
+              <div class="single-palette" style="background-color:${
+                palette.project_id === id ? palette.color_3 : ''
+              }"></div>
+              <div class="single-palette" style="background-color:${
+                palette.project_id === id ? palette.color_4 : ''
+              }"></div>
+              <div class="single-palette" style="background-color:${
+                palette.project_id === id ? palette.color_5 : ''
+              }"></div>`
+          )
+        : ''
   );
 };
 
-const getPalettes = async () => {
+const displayProjects = async () => {
+  const url = '/api/v1/projects';
+  const projectContainer = $('.project-container');
+
+  const response = await fetch(url);
+  const projects = await response.json();
+
+  projects.forEach(project => {
+    return projectContainer.append(
+      `<div class="saved-palette-container">
+        <h4>${project.project_name.charAt(0).toUpperCase() +
+          project.project_name.slice(1)}
+        </h4>
+        <div class="palettes" id=${project.id}></div>
+    </div>`,
+      displayPalettes(project.id)
+    );
+  });
+};
+
+const fetchPalettes = async () => {
   const url = '/api/v1/palettes';
 
   const response = await fetch(url);
