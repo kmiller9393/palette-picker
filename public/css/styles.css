@@ -162,5 +162,10 @@ input {
 
 .saved-palette-container {
   display: flex;
+  flex-direction: row;
   margin-left: 0.5rem;
+}
+
+.palettes {
+  display: flex;
 }
