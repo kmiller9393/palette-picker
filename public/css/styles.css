@@ -151,4 +151,15 @@ input {
   height: 140px;
   margin-top: 0.9rem;
   opacity: 0.7;
+  overflow: scroll;
+}
+
+.single-palette {
+  height: 20px;
+  margin-left: 0.25rem;
+  width: 20px;
+}
+
+.saved-palette-container {
+  display: flex;
 }
