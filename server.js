@@ -53,7 +53,15 @@ app.post('/api/v1/palettes', (request, response) => {
         error: `Expected format: { palette_name: <String>, color_1: <String>, color_2: <String>, color_3: <String>, color_4: <String>, color_5: <String>, project_id: <String> }. You're missing a "${requiredParameter}" property.`
       });
     }
-    database('projects').where(('project_name', palette.project_id));
+    database('projects')
+      .where(('project_name', '==', palette.project_id))
+      .insert(palette, 'id')
+      .then(palette => {
+        response.status(201).json({ id: palette[0] });
+      })
+      .catch(error => {
+        response.status(500).json({ error });
+      });
   }
 
   database('palettes')
