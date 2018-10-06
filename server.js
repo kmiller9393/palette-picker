@@ -45,13 +45,15 @@ app.post('/api/v1/palettes', (request, response) => {
     'color_2',
     'color_3',
     'color_4',
-    'color_5'
+    'color_5',
+    'project_id'
   ]) {
     if (!palette[requiredParameter]) {
       return response.status(422).send({
-        error: `Expected format: { palette_name: <String>, color_1: <String>, color_2: <String>, color_3: <String>, color_4: <String>, color_5: <String> }. You're missing a "${requiredParameter}" property.`
+        error: `Expected format: { palette_name: <String>, color_1: <String>, color_2: <String>, color_3: <String>, color_4: <String>, color_5: <String>, project_id: <String> }. You're missing a "${requiredParameter}" property.`
       });
     }
+    database('projects').where(('project_name', palette.project_id));
   }
 
   database('palettes')
@@ -64,7 +66,7 @@ app.post('/api/v1/palettes', (request, response) => {
     });
 });
 
-app.post('api/v1/projects', (request, response) => {
+app.post('/api/v1/projects', (request, response) => {
   const project = request.body;
 
   for (let requiredParameter of ['project_name']) {
@@ -85,6 +87,8 @@ app.post('api/v1/projects', (request, response) => {
     });
 });
 
-app.delete('/api/v1/:id/palettes/', (request, response) => {});
+app.delete('/api/v1/palettes/:id', (request, response) => {
+  //request.params.id
+});
 
 app.use(express.static('public'));
