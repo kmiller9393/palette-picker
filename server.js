@@ -55,12 +55,9 @@ app.post('/api/v1/palettes', (request, response) => {
     }
     database('projects')
       .where(('project_name', '==', palette.project_id))
-      .insert(palette, 'id')
+      .select()
       .then(palette => {
-        response.status(201).json({ id: palette[0] });
-      })
-      .catch(error => {
-        response.status(500).json({ error });
+        response.status(201).json({ id: palette.project_id });
       });
   }
 
@@ -80,7 +77,8 @@ app.post('/api/v1/projects', (request, response) => {
   for (let requiredParameter of ['project_name']) {
     if (!project[requiredParameter]) {
       return response.status(422).send({
-        error: `Expected format: { project_name: <String> }. You're missing a "${requiredParameter}" property.`
+        error: `Expected format: { project_name: <String> }. You're missing a "${requiredParameter}" 
+        property.`
       });
     }
   }
@@ -95,8 +93,6 @@ app.post('/api/v1/projects', (request, response) => {
     });
 });
 
-app.delete('/api/v1/palettes/:id', (request, response) => {
-  //request.params.id
-});
+app.delete('/api/v1/palettes/:id', (request, response) => {});
 
 app.use(express.static('public'));
