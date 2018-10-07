@@ -1,5 +1,6 @@
 const randomizeButton = $('.radomize-palette');
 const lockButton = $('.padlock-image');
+const addProjectButton = $('.add-project');
 
 let colors = [];
 
@@ -11,6 +12,7 @@ const displayPalettes = async id => {
       palette.project_id === id
         ? $(`#${id}`).append(
             `<section class="palettes">
+              <p>${palette.palette_name}</p>  
               <div class="single-palette" style="background-color:${
                 palette.project_id === id ? palette.color_1 : ''
               }"></div>
@@ -117,6 +119,18 @@ const setNewColor = () => {
   });
 };
 
+const addProjectOption = e => {
+  e.preventDefault();
+  const selections = $('select');
+  const projectInput = $('.project-input');
+
+  const inputVal = projectInput.val();
+
+  selections.append($(`<option>${inputVal}</option>`));
+};
+
 randomizeButton.on('click', setNewColor);
+
+addProjectButton.on('click', addProjectOption);
 
 lockButton.on('click', lockColor);
