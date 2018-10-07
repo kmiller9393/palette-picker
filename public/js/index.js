@@ -2,7 +2,7 @@ const randomizeButton = $('.radomize-palette');
 const lockButton = $('.padlock-image');
 const addProjectButton = $('.add-project');
 
-let colors = [];
+let colors;
 
 const displayPalettes = async id => {
   const palettes = await fetchPalettes();
@@ -36,6 +36,7 @@ const displayPalettes = async id => {
 const displayProjects = async () => {
   const url = '/api/v1/projects';
   const projectContainer = $('.project-container');
+  const projectOptions = $('select');
 
   const response = await fetch(url);
   const projects = await response.json();
@@ -50,6 +51,10 @@ const displayProjects = async () => {
     </div>`,
       displayPalettes(project.id)
     );
+  });
+
+  projects.forEach(project => {
+    return projectOptions.append(`<option>${project.project_name}</option>`);
   });
 };
 
@@ -74,6 +79,7 @@ const generateNewColor = () => {
   for (let i = 0; i < 6; i++) {
     hex += possibleChars[Math.floor(Math.random() * 16)];
   }
+
   return hex;
 };
 
@@ -107,10 +113,12 @@ const setNewColor = () => {
     '.palette-4',
     '.palette-5'
   ];
+  colors = [];
 
   palettes.forEach(palette => {
     if (!$(`${palette}`).hasClass('locked-color')) {
       const newColor = generateNewColor();
+      colors.push(newColor);
       $(`${palette}`).css('background-color', newColor);
       $(`${palette}`)
         .children('p')
@@ -124,13 +132,38 @@ const addProjectOption = e => {
   const selections = $('select');
   const projectInput = $('.project-input');
 
-  const inputVal = projectInput.val();
+  const project_name =
+    projectInput
+      .val()
+      .charAt(0)
+      .toUpperCase() + projectInput.val().slice(1);
 
-  selections.append($(`<option>${inputVal}</option>`));
+  selections.append($(`<option>${project_name}</option>`));
+
+  addProject({ project_name });
+  projectInput.val('');
+};
+
+const addProject = async project => {
+  const url = 'api/v1/projects';
+
+  const response = await fetch(url, {
+    method: 'POST',
+    body: JSON.stringify({
+      ...project
+    }),
+    headers: {
+      'content-type': 'application/json'
+    }
+  });
+
+  await response.json();
 };
 
 randomizeButton.on('click', setNewColor);
 
 addProjectButton.on('click', addProjectOption);
+
+addPaletteButton.on('click', addPaletteToProject);
 
 lockButton.on('click', lockColor);
