@@ -16,19 +16,19 @@ const displayPalettes = async id => {
               <p>${palette.palette_name}</p>  
               <div class="single-palette" style="background-color:${
                 palette.project_id === id ? palette.color_1 : ''
-              }"></div>
+              }" id=${palette.color_1}></div>
               <div class="single-palette" style="background-color:${
                 palette.project_id === id ? palette.color_2 : ''
-              }"></div>
+              }" id=${palette.color_2}></div>
               <div class="single-palette" style="background-color:${
                 palette.project_id === id ? palette.color_3 : ''
-              }"></div>
+              }" id=${palette.color_3}></div>
               <div class="single-palette" style="background-color:${
                 palette.project_id === id ? palette.color_4 : ''
-              }"></div>
+              }" id=${palette.color_4}></div>
               <div class="single-palette" style="background-color:${
                 palette.project_id === id ? palette.color_5 : ''
-              }"></div>
+              }" id=${palette.color_5}></div>
               <button class="delete-palette">X</button>
             </section>`
           )
@@ -211,10 +211,6 @@ const addPaletteToProject = async (palette_name, project_id) => {
       'content-type': 'application/json'
     }
   });
-
-  const updatedPalletes = await response.json();
-
-  return updatedPalletes;
 };
 
 const setPaletteView = event => {
@@ -225,24 +221,39 @@ const setPaletteView = event => {
   ) {
     const color1 = $(event.target)
       .parent()
-      .children('div')[0].style.backgroundColor;
+      .children('div')[0].id;
     const color2 = $(event.target)
       .parent()
-      .children('div')[1].style.backgroundColor;
+      .children('div')[1].id;
     const color3 = $(event.target)
       .parent()
-      .children('div')[2].style.backgroundColor;
+      .children('div')[2].id;
     const color4 = $(event.target)
       .parent()
-      .children('div')[3].style.backgroundColor;
+      .children('div')[3].id;
     const color5 = $(event.target)
       .parent()
-      .children('div')[4].style.backgroundColor;
+      .children('div')[4].id;
     $('.palette-1').css('background-color', color1);
+    $('.palette-1')
+      .children('p')
+      .text(color1);
     $('.palette-2').css('background-color', color2);
+    $('.palette-2')
+      .children('p')
+      .text(color2);
     $('.palette-3').css('background-color', color3);
+    $('.palette-3')
+      .children('p')
+      .text(color3);
     $('.palette-4').css('background-color', color4);
+    $('.palette-4')
+      .children('p')
+      .text(color4);
     $('.palette-5').css('background-color', color5);
+    $('.palette-5')
+      .children('p')
+      .text(color4);
   }
 };
 
