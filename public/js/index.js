@@ -8,28 +8,29 @@ let updatedProjects = [];
 
 const displayPalettes = async id => {
   const palettes = await fetchPalettes();
-
   palettes.forEach(
     palette =>
       palette.project_id === id
         ? $(`#${id}`).append(
-            `<section class="palettes">
+            `<section class="palettes" id=${palette.id}>
               <p>${palette.palette_name}</p>  
               <div class="single-palette" style="background-color:${
                 palette.project_id === id ? palette.color_1 : ''
-              }" name=${palette.color_1}></div>
+              }"></div>
               <div class="single-palette" style="background-color:${
                 palette.project_id === id ? palette.color_2 : ''
-              }" name=${palette.color_2}></div>
+              }"></div>
               <div class="single-palette" style="background-color:${
                 palette.project_id === id ? palette.color_3 : ''
-              }" name=${palette.color_3}></div>
+              }"></div>
               <div class="single-palette" style="background-color:${
                 palette.project_id === id ? palette.color_4 : ''
-              }" name=${palette.color_4}></div>
+              }"></div>
               <div class="single-palette" style="background-color:${
                 palette.project_id === id ? palette.color_5 : ''
-              }" name=${palette.color_5}></div>`
+              }"></div>
+              <button class="delete-palette">X</button>
+            </section>`
           )
         : ''
   );
@@ -128,23 +129,22 @@ const setNewColor = () => {
   });
 };
 
-const addProjectOption = e => {
+const addProjectOption = async e => {
   e.preventDefault();
+
+  const projects = await fetchProjects();
 
   const projectInput = $('.project-input');
   const selections = $('select');
-  const allNames = updatedProjects.map(project => project.project_name);
+
+  const allNames = projects.map(project => project.project_name);
 
   if (allNames.includes(projectInput.val())) {
     alert('That project already exists, please submit a new one!');
     return;
   }
 
-  const project_name =
-    projectInput
-      .val()
-      .charAt(0)
-      .toUpperCase() + projectInput.val().slice(1);
+  const project_name = projectInput.val();
 
   selections.append($(`<option>${project_name}</option>`));
 
@@ -246,6 +246,18 @@ const setPaletteView = event => {
   }
 };
 
+const deletePalette = e => {
+  const id = $(e.target)
+    .parent('section')
+    .attr('id');
+  const url = `/api/v1/palettes/${id}`;
+  fetch(url, {
+    method: 'DELETE'
+  });
+
+  e.target.closest('section').remove();
+};
+
 randomizeButton.on('click', setNewColor);
 
 addProjectButton.on('click', addProjectOption);
@@ -253,5 +265,7 @@ addProjectButton.on('click', addProjectOption);
 addPaletteButton.on('click', submitPalette);
 
 projectContainer.on('click', '.single-palette', setPaletteView);
+
+projectContainer.on('click', '.delete-palette', deletePalette);
 
 lockButton.on('click', lockColor);
