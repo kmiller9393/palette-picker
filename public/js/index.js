@@ -4,6 +4,8 @@ const addProjectButton = $('.add-project');
 const addPaletteButton = $('.add-palette');
 const projectContainer = $('.project-container');
 
+let updatedProjects = [];
+
 const displayPalettes = async id => {
   const palettes = await fetchPalettes();
 
@@ -39,6 +41,8 @@ const displayProjects = async () => {
 
   const response = await fetch(url);
   const projects = await response.json();
+
+  updatedProjects = [...projects];
 
   projects.forEach(project => {
     return projectContainer.append(
@@ -126,8 +130,15 @@ const setNewColor = () => {
 
 const addProjectOption = e => {
   e.preventDefault();
-  const selections = $('select');
+
   const projectInput = $('.project-input');
+  const selections = $('select');
+  const allNames = updatedProjects.map(project => project.project_name);
+
+  if (allNames.includes(projectInput.val())) {
+    alert('That project already exists, please submit a new one!');
+    return;
+  }
 
   const project_name =
     projectInput
@@ -178,7 +189,7 @@ const filterProject = async proj => {
   const projects = await fetchProjects();
 
   const project = projects.find(project => project.project_name === proj);
-  console.log(project);
+
   return project.id;
 };
 
@@ -207,18 +218,11 @@ const addPaletteToProject = async (palette_name, project_id) => {
 };
 
 const setPaletteView = event => {
-  const palette = event.target;
-
   if (
     $(event.target)
       .parent()
       .hasClass('palettes')
   ) {
-    console.log(
-      $(event.target)
-        .parent()
-        .children('div')[0].style.backgroundColor
-    );
     const color1 = $(event.target)
       .parent()
       .children('div')[0].style.backgroundColor;
