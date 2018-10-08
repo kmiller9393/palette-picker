@@ -167,5 +167,6 @@ input {
 }
 
 .palettes {
+  cursor: pointer;
   display: flex;
 }
