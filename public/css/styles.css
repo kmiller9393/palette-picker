@@ -169,4 +169,11 @@ input {
 .palettes {
   cursor: pointer;
   display: flex;
+  margin-left: 1rem;
+}
+
+.delete-palette {
+  height: 20px;
+  margin-left: 0.5rem;
+  width: 20px;
 }
