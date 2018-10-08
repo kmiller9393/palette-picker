@@ -1,8 +1,8 @@
 const randomizeButton = $('.radomize-palette');
 const lockButton = $('.padlock-image');
 const addProjectButton = $('.add-project');
-
-let colors;
+const addPaletteButton = $('.add-palette');
+const projectContainer = $('.project-container');
 
 const displayPalettes = async id => {
   const palettes = await fetchPalettes();
@@ -15,19 +15,19 @@ const displayPalettes = async id => {
               <p>${palette.palette_name}</p>  
               <div class="single-palette" style="background-color:${
                 palette.project_id === id ? palette.color_1 : ''
-              }"></div>
+              }" name=${palette.color_1}></div>
               <div class="single-palette" style="background-color:${
                 palette.project_id === id ? palette.color_2 : ''
-              }"></div>
+              }" name=${palette.color_2}></div>
               <div class="single-palette" style="background-color:${
                 palette.project_id === id ? palette.color_3 : ''
-              }"></div>
+              }" name=${palette.color_3}></div>
               <div class="single-palette" style="background-color:${
                 palette.project_id === id ? palette.color_4 : ''
-              }"></div>
+              }" name=${palette.color_4}></div>
               <div class="single-palette" style="background-color:${
                 palette.project_id === id ? palette.color_5 : ''
-              }"></div>`
+              }" name=${palette.color_5}></div>`
           )
         : ''
   );
@@ -35,7 +35,6 @@ const displayPalettes = async id => {
 
 const displayProjects = async () => {
   const url = '/api/v1/projects';
-  const projectContainer = $('.project-container');
   const projectOptions = $('select');
 
   const response = await fetch(url);
@@ -113,12 +112,10 @@ const setNewColor = () => {
     '.palette-4',
     '.palette-5'
   ];
-  colors = [];
 
   palettes.forEach(palette => {
     if (!$(`${palette}`).hasClass('locked-color')) {
       const newColor = generateNewColor();
-      colors.push(newColor);
       $(`${palette}`).css('background-color', newColor);
       $(`${palette}`)
         .children('p')
@@ -145,7 +142,7 @@ const addProjectOption = e => {
 };
 
 const addProject = async project => {
-  const url = 'api/v1/projects';
+  const url = '/api/v1/projects';
 
   const response = await fetch(url, {
     method: 'POST',
@@ -160,10 +157,97 @@ const addProject = async project => {
   await response.json();
 };
 
+const fetchProjects = async () => {
+  const url = '/api/v1/projects';
+  const response = await fetch(url);
+  const allProjects = await response.json();
+  return allProjects;
+};
+
+const submitPalette = async e => {
+  e.preventDefault();
+
+  const palette = $('.palette-input').val();
+  const project = $('select option:selected').text();
+  const projectId = await filterProject(project);
+
+  await addPaletteToProject(palette, projectId);
+};
+
+const filterProject = async proj => {
+  const projects = await fetchProjects();
+
+  const project = projects.find(project => project.project_name === proj);
+  console.log(project);
+  return project.id;
+};
+
+const addPaletteToProject = async (palette_name, project_id) => {
+  const url = `/api/v1/projects/${project_id}/palettes`;
+
+  const response = await fetch(url, {
+    method: 'POST',
+    body: JSON.stringify({
+      palette_name,
+      color_1: $('.palette-label-1').text(),
+      color_2: $('.palette-label-2').text(),
+      color_3: $('.palette-label-3').text(),
+      color_4: $('.palette-label-4').text(),
+      color_5: $('.palette-label-5').text(),
+      project_id
+    }),
+    headers: {
+      'content-type': 'application/json'
+    }
+  });
+
+  const updatedPalletes = await response.json();
+
+  return updatedPalletes;
+};
+
+const setPaletteView = event => {
+  const palette = event.target;
+
+  if (
+    $(event.target)
+      .parent()
+      .hasClass('palettes')
+  ) {
+    console.log(
+      $(event.target)
+        .parent()
+        .children('div')[0].style.backgroundColor
+    );
+    const color1 = $(event.target)
+      .parent()
+      .children('div')[0].style.backgroundColor;
+    const color2 = $(event.target)
+      .parent()
+      .children('div')[1].style.backgroundColor;
+    const color3 = $(event.target)
+      .parent()
+      .children('div')[2].style.backgroundColor;
+    const color4 = $(event.target)
+      .parent()
+      .children('div')[3].style.backgroundColor;
+    const color5 = $(event.target)
+      .parent()
+      .children('div')[4].style.backgroundColor;
+    $('.palette-1').css('background-color', color1);
+    $('.palette-2').css('background-color', color2);
+    $('.palette-3').css('background-color', color3);
+    $('.palette-4').css('background-color', color4);
+    $('.palette-5').css('background-color', color5);
+  }
+};
+
 randomizeButton.on('click', setNewColor);
 
 addProjectButton.on('click', addProjectOption);
 
-addPaletteButton.on('click', addPaletteToProject);
+addPaletteButton.on('click', submitPalette);
+
+projectContainer.on('click', '.single-palette', setPaletteView);
 
 lockButton.on('click', lockColor);
