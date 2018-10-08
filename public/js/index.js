@@ -45,20 +45,21 @@ const displayProjects = async () => {
 
   updatedProjects = [...projects];
 
-  projects.forEach(project => {
-    return projectContainer.append(
+  projects.forEach(project =>
+    projectContainer.append(
       `<div class="saved-palette-container">
         <h4>${project.project_name.charAt(0).toUpperCase() +
           project.project_name.slice(1)}
         </h4>
         <div class="palettes" id=${project.id}></div>
     </div>`,
+
       displayPalettes(project.id)
-    );
-  });
+    )
+  );
 
   projects.forEach(project => {
-    return projectOptions.append(`<option>${project.project_name}</option>`);
+    projectOptions.append(`<option>${project.project_name}</option>`);
   });
 };
 
@@ -183,12 +184,13 @@ const submitPalette = async e => {
   const projectId = await filterProject(project);
 
   await addPaletteToProject(palette, projectId);
+  displayProjects();
 };
 
 const filterProject = async proj => {
-  const projects = await fetchProjects();
-
-  const project = projects.find(project => project.project_name === proj);
+  const project = updatedProjects.find(
+    project => project.project_name === proj
+  );
 
   return project.id;
 };
@@ -196,7 +198,7 @@ const filterProject = async proj => {
 const addPaletteToProject = async (palette_name, project_id) => {
   const url = `/api/v1/projects/${project_id}/palettes`;
 
-  const response = await fetch(url, {
+  await fetch(url, {
     method: 'POST',
     body: JSON.stringify({
       palette_name,
